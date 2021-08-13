@@ -24,13 +24,13 @@
 					</span>
 				</li>
                 <li><a href="/jsp_leopard/user/login.jsp">Login</a></li>
-                <li><a href="#">MYPAGE</a></li>
+                <li><a href="/jsp_leopard/user/mypage.jsp">MYPAGE</a></li>
                 <li><a href="#">CART</a></li>
             </ul>
 			
             
         </div>
-        <h1 class="tit"><a href="/jsp_leopard/index.jsp">LEOPARD</a></h1>
+        <h1 class="tit"><a href="/jsp_leopard/index.jsp"><img src="/jsp_leopard/images/main_logo.png" alt="" id="main_logo"></a></h1>
         <div class="gnb_box">
             <nav class="gnb">
             <ul class="left_gnb">
