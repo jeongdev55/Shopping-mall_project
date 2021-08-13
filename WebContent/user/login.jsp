@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="../css/login.css">
+<link rel="stylesheet" type="text/css" href="../css/login.css">   
     <%    request.setCharacterEncoding("euc-kr");   %>
     
     <title>로그인 화면</title>
@@ -35,19 +35,19 @@
 </head>
 <body>
 	<%@ include file="../include/header.jsp" %>
-    <div class="login">
+    <div class="container">
         <div class="login__div">
-            <h1 class="login__text">LOGIN</h1>
+            <h1>LOGIN</h1>
             <form name="loginInfo" method="post" action=""  autocomplete="on"
             onsubmit="return checkValue()">
             <div class="login__input">
                 <table class="login__teble">
                     <tr>
-                        <td><string>ID :</string></td>
+                        <td><strong>ID :</strong></td>
                         <td><input type="text" name="id" placeholder=" 아이디 입력" maxlength="15"></td>
                     </tr>
                     <tr>
-                        <td><string>PW :</string></td>
+                        <td><strong>PW :</strong></td>
                         <td><input type="password" name="password" autocapitalize="off" placeholder=" 비밀번호 입력" maxlength="30"></td>
                     </tr>
                     <tr><td colspan="2"><a href="#" id="loginsearch">아이디 찾기</a>&nbsp;<a href="#" id="loginsearch">비밀번호 찾기</a></td></tr>
@@ -57,11 +57,12 @@
                 </table>
                </div>
             </form>
+            </div>
             <div class="login__bottom">
                 <div class="bottom__text"><p>회원가입을 하시면 다양하고 </p>특별한 혜택이 준비되어 있습니다.</div>
                 <div class="bottom__button"><input type="button" id="login__button" value="회원가입"  onclick="location.href='./join.jsp'"></div>
             </div>
-        </div>
+   
         </div>
                     <% 
             
