@@ -11,7 +11,8 @@
 	background-size: cover;
 	color: #fff;
 	font-size: 100px;
-	padding-top: 200px; box-sizing: border-box;
+	margin:65px auto;
+	box-sizing: border-box;
 	text-align: center;
 }
 #visual li.slider1 { background-image: url(../images/top1.png)}
