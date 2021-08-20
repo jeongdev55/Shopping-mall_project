@@ -1,6 +1,7 @@
 
 let qtotal=0;
 
+
 //상품 상세 이미지 변경----------------------------------------------------------------------------------------
 var $mainProduct = $('.main_product'),
     $bigImg = $mainProduct.find('.big_img');
@@ -44,7 +45,19 @@ var $orderClick = $('.order_click'),  //클릭버튼 있는 구간 등록
     $productName=$('.product_specs .product_option h2 label'),      //상품명/컬러/사이즈/수량(위에서 만든 $quyInput.val()로 처리) 가져오기
     $productColor=$('.color select[name="option_1"]'),  //컬러 경로
     $dataRow=$showData.find('.show_data_row'), //데이터 행 경로
-    $delBtn=$dataRow.find('span');  //데이터 삭제 버튼 경로
+    $delBtn=$dataRow.find('span'),  //데이터 삭제 버튼 경로
+    $orderRow=$('.order_now'),  //주문 구간 등록
+    $orderBtn=$orderRow.find('.orderBtn');  //주문 버튼 경로
+
+
+
+
+$orderBtn.click(function(){	
+	var text=$(".show_data").find('.show_data_row').text();
+	
+	location.href="/jsp_leopard/product/payment.jsp?text="+text;
+});
+
 
 
 
@@ -61,7 +74,7 @@ $clickBtn.click(function(){
         alert("color 또는 size를 선택해주세요");
     }else{
         //새로운 행 추가
-        $showData.append('<p class="show_data_row">'+ Name +'/'+ Color+'/'+Size+'/'+ quantity+ '<span class="delete">x</span></p>');
+        $showData.append('<p class="show_data_row">'+ Name +'/'+ Color+'/'+Size+'/'+ quantity+'<span class="delete">ⓧ</span></p>');
         $quyInput.val("1"); //수량 값 초기화
         $productColor.val("");  //select값 초기화
         qtotal+=parseInt(quantity); //사용자가 입력한 수량을 총수량 변수에 넣어줌
@@ -93,7 +106,8 @@ function priceShow(qtotal){
     $tagetTotal.text(TotalPrice+'원');  //생성된 가격을 총가격이 표시되는 위치에 텍스트로 넣어줌
 }
 
-
+//제품의 가격을 가져와서 마일리지에 자동 적용
+$('#mileage').text($('#price').text()*0.01);
 
 
 //----------마우스 이벤트--------------------//
@@ -116,6 +130,5 @@ $('.orderBtn').hover(function(){
 },function(){
     $('.orderBtn').find('img').attr('src',"/jsp_leopard/images/order1.png");
 })
-
 
        
