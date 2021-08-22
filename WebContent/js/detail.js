@@ -1,7 +1,6 @@
 
 let qtotal=0;
 
-
 //상품 상세 이미지 변경----------------------------------------------------------------------------------------
 var $mainProduct = $('.main_product'),
     $bigImg = $mainProduct.find('.big_img');
@@ -17,14 +16,18 @@ $subImgList.click(function(){
 
 
 /* + - 버튼 선택시 수량 업다운 구간---------------------------------------------------------------------  */
-var $quantitydiv=$('.quantity'),
-    $unitprice = $quantitydiv.attr('data-unitprice'),
-    $qBtn=$quantitydiv.find('span'),
-    $quyInput=$quantitydiv.find('input'),
-    $tagetTotal=$('.total_price .price');
+var $quantitydiv=$('.quantity'), //수량 구간 등록
+    $unitprice = $quantitydiv.attr('data-unitprice'),  //상품 가격 넣기
+    $qBtn=$quantitydiv.find('span'), //업 다운 버튼 등록
+    $quyInput=$quantitydiv.find('input'), //수량 데이터 변하는 구간
+    $tagetTotal=$('.total_price .price'); //총 가격 나오는 구간
+
+
+
 
 $qBtn.click(function(){
     var currentCount=$quyInput.val();
+
 
     if($(this).hasClass('plus')){
         // currentCount++;
@@ -33,7 +36,9 @@ $qBtn.click(function(){
     }else{
         if(currentCount>1) //수량이 1보다는 커야 주문이 가능함으로
             $quyInput.val(--currentCount);
-    }      
+    }   
+       
+
 });
 
 
@@ -46,19 +51,8 @@ var $orderClick = $('.order_click'),  //클릭버튼 있는 구간 등록
     $productColor=$('.color select[name="option_1"]'),  //컬러 경로
     $dataRow=$showData.find('.show_data_row'), //데이터 행 경로
     $delBtn=$dataRow.find('span'),  //데이터 삭제 버튼 경로
-    $orderRow=$('.order_now'),  //주문 구간 등록
-    $orderBtn=$orderRow.find('.orderBtn');  //주문 버튼 경로
-
-
-
-
-$orderBtn.click(function(){	
-	var text=$(".show_data").find('.show_data_row').text();
-	
-	location.href="/jsp_leopard/product/payment.jsp?text="+text;
-});
-
-
+    $orderNow=$('.order_now'),
+    $orderBtn=$orderNow.find('.orderBtn');
 
 
 //상품 추가 버튼 클릭 시 (필요한것: 상품명/컬러/사이즈/수량)
@@ -66,48 +60,66 @@ $clickBtn.click(function(){
     var Name=$productName.text(), //ok
         Color=$productColor.val(),  //ok
         Size=$("input[name='size']:checked").val(), //ok
-        quantity=$quyInput.val();  //ok
-    
-    $('.select_product').css("display","block");
-    
+        quantity=$quyInput.val();  //ok  
+
+        
+    var price=quantity*$unitprice;
+    let list=[Name,Color,Size,quantity,price];    //get List
     if(Color=="" || Size==null){
         alert("color 또는 size를 선택해주세요");
     }else{
-        //새로운 행 추가
-        $showData.append('<p class="show_data_row">'+ Name +'/'+ Color+'/'+Size+'/'+ quantity+'<span class="delete">ⓧ</span></p>');
+        itemList.push(list);
         $quyInput.val("1"); //수량 값 초기화
         $productColor.val("");  //select값 초기화
-        qtotal+=parseInt(quantity); //사용자가 입력한 수량을 총수량 변수에 넣어줌
-        priceShow(qtotal); //수량변경에 따른 가격변경을 위한 함수 호출 (인자로 넘김)
+        $('.select_product').css("display","block");
+        showList();
     }    
 });
 
-//상품 삭제 버튼이 존재한다면 / 그리고 클릭한다면
+let itemList=[];
+
+//상품 삭제 버튼 클릭시
 $delBtn.live('click',function(){
-    var text=$(this).parentsUntil("div").text(); //버튼을 통해 선택된 행의 텍스트를 가져옴
-    var quantity = parseInt(text.charAt(text.length-2)); //텍스트를 문자로 잘라 수량부분만 가져와서 int형으로 변환 후 넣어줌
+    let id=this.getAttribute("id");  //넘어온 요소의 id를 반환함
+    itemList.splice(id, 1);   //리스트에 있는 해당 id를 삭제 splice("삭제할 요소","제거할 요소의 수")
+    priceShow(); //삭제에 따른 가격변동을 보여주기위해 함수 호출
     $(this).parentsUntil("div").remove();  //부모 요소중 div를 만나기 전까지 삭제시킴 즉, 행삭제
     $(this).remove(); //자기자신 (버튼)까지 삭제
-    qtotal-=quantity;  //총 수량에서 삭제되는 수량까지 삭제
-    priceShow(qtotal); //삭제에 따른 가격변동을 보여주기위해 함수 호출
+    priceShow();
     
-    if(qtotal=="0"){
-        $('.select_product').css("display","none");
-        
-    }
-    
+
 });
 
 
-//총 가격을 보여주는 함수 - 데이터 삭제 또는 추가 시 호출
-function priceShow(qtotal){
-    var lastqTotal=qtotal;  //인자로 받아온 값을 새로 넣어줌
-    var TotalPrice=($unitprice * qtotal).toLocaleString('en');  //총 가격을 구하기위해서 제품의 기본 가격을 가져와서 곱함 (.toLocaleString)을 통해서 3자리 ,컴마 구분
-    $tagetTotal.text(TotalPrice+'원');  //생성된 가격을 총가격이 표시되는 위치에 텍스트로 넣어줌
+//리스트에 들어있는 주문목록들이 반복을 통해서 나타남
+function showList(){
+    for(let i=0;i<itemList.length;i++){
+        list="<p class='show_data_row' id="+i+">"
+        for(let j=0;j<itemList[i].length;j++){
+            list+=itemList[i][j]+' ';
+        }
+        list+='<span class="delete">x</span></p>';
+    }
+    $showData.append(list);
+    priceShow();   
 }
 
-//제품의 가격을 가져와서 마일리지에 자동 적용
-$('#mileage').text($('#price').text()*0.01);
+//총가격을 보여주는 함수
+function priceShow(qtotal){
+    var lastqTotal=0;
+    for(let i=0;i<itemList.length;i++){
+            lastqTotal+=Number(itemList[i][3]);  //리스트에 있는 수량만큼만 가격을 더해줌                
+    }
+    var TotalPrice=($unitprice * lastqTotal).toLocaleString('en');
+    $tagetTotal.text(TotalPrice+'원');  //생성된 가격을 총가격이 표시되는 위치에 텍스트로 넣어줌
+    if(TotalPrice==0){
+    	$('.select_product').css("display","none");
+    }
+}
+
+$orderBtn.click(function(){	 
+   location.href='/jsp_leopard/product/payment.jsp?itemList='+itemList;
+});
 
 
 //----------마우스 이벤트--------------------//
@@ -130,5 +142,12 @@ $('.orderBtn').hover(function(){
 },function(){
     $('.orderBtn').find('img').attr('src',"/jsp_leopard/images/order1.png");
 })
+
+
+        
+
+
+
+
 
        
