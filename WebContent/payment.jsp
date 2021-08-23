@@ -9,13 +9,17 @@
 <meta charset="UTF-8">
 <title>결제 창</title>
     <script src='http://code.jquery.com/jquery-1.8.2.min.js'></script>
+    <script src="../js/payment.js"></script>
+	<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+<!-- <script src="../js/import.js"></script> -->
+
+
+
 <link rel="stylesheet" href="../css/payment.css">
 <%
 	request.setCharacterEncoding("UTF-8");
 	// String[] arr = request.getParameterValues("itemList");
 	String[] arr = (String[])request.getParameterValues("itemList");
-	
-	
 %>
 <script>	
 	var str='<%=arr[0]%>';
@@ -56,12 +60,45 @@ $(document).ready(function () {
 		$('#itemprice').text(itemprice);
 	}
 	
+	$('.btn_order').click(function(){
+		iamport();
+	})
+	
+	function iamport(){
+		//가맹점 식별코드
+		IMP.init('imp30707647');
+		IMP.request_pay({
+		    pg : 'html5_inicis',
+		    pay_method : 'card',
+		    merchant_uid : 'merchant_' + new Date().getTime(),
+		    name : 'LEOPARD 결재창' , //결제창에서 보여질 이름
+		    amount : $('#totalprice').text(), //실제 결제되는 가격  //여기부분 수정해서 토탈 가격으로 바꾸면 결재 ok
+		    buyer_email : 'leopard',  
+		    buyer_name : '구매자이름',
+		    buyer_tel : '010-1234-5678',
+		    buyer_addr : '서울 강남구 도곡동',
+		    buyer_postcode : '123-456'
+		}, function(rsp) {
+			console.log(rsp);
+		    if ( rsp.success ) {
+		    	var msg = '결제가 완료되었습니다.';
+		        msg += '고유ID : ' + rsp.imp_uid;
+		        msg += '상점 거래ID : ' + rsp.merchant_uid;
+		        msg += '결제 금액 : ' + rsp.paid_amount;
+		        msg += '카드 승인번호 : ' + rsp.apply_num;
+		    } else {
+		    	 var msg = '결제에 실패하였습니다.';
+		         msg += '에러내용 : ' + rsp.error_msg;
+		    }
+		    alert(msg);
+		});
+	}
 	
 	
   });
+	
+	
 </script>
-
-<script src="../js/payment.js"></script>
 
 </head>
 <body>
@@ -89,7 +126,7 @@ $(document).ready(function () {
 						</table>
 						<p id="price">[기본배송] 상품구매금액 <label id="itemprice"></label> + 배송비<strong>2500</strong> = 합계 : <label id="totalprice"></label>원</p>
 						<div class="cart_buy_btn">
-							<input type="button" onclick="location.href='      '" value="결제하기" class="btn_order buy_btn"/>
+							<input type="button"  value="결제하기" class="btn_order buy_btn"/>
 							 <input type="button" onclick="location.href='      '" value="결제 취소" class="btn_shop buy_btn"/>
 						</div>
 				</div>
