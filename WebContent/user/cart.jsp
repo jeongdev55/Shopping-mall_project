@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="../css/cart.css">
+<link rel="stylesheet" href="../css/cart.css?ver=2">
 
 	<link rel="stylesheet" type="text/css" href="/jsp_leopard/css/reset.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>	
@@ -65,22 +66,16 @@
 	            <td class="cart_list4">수량</td>
 	            <td class="cart_list5">${p.pro_price }</td>
 	        </tr> --%>
+	   <c:forEach var="i" items="${cartList }">
 	        <tr class="cart_box">
 	       		<td class="cart_list cart_list2"><input type="checkbox" /></td>
-	            <td class="cart_list cart_list1"><img src="../images/product_1.gif" alt="" /></td>
-	            <td class="cart_list cart_list2">상품명</td>
-	            <td class="cart_list cart_list3">상품정보</td>
-	            <td class="cart_list cart_list4">수량</td>
-	            <td class="cart_list cart_list5">금액</td>
+	            <td class="cart_list cart_list1"><img src="${i.pro_img }" alt="" /></td>
+	            <td class="cart_list cart_list2">${i.pro_name }</td>
+	            <td class="cart_list cart_list3">${i.pro_info }</td>
+	            <td class="cart_list cart_list4">${i.quantity }</td>
+	            <td class="cart_list cart_list5">${i.pro_price }</td>
 	        </tr>
-	        <tr class="cart_box">
-	       		<td class="cart_list cart_list2"><input type="checkbox" /></td>
-	            <td class="cart_list cart_list1"><img src="../images/product_1.gif" alt="" /></td>
-	            <td class="cart_list cart_list2">상품명</td>
-	            <td class="cart_list cart_list3">상품정보</td>
-	            <td class="cart_list cart_list4">수량</td>
-	            <td class="cart_list cart_list5">금액</td>
-	        </tr>
+	  </c:forEach>
 	        <tr>
 	        <td colspan="6" class="cart_info">
 	        	<p>[기본배송] 상품구매금액 <strong>39,800</strong> + 배송비<strong>2,500</strong> = 합계 : <strong>32,500</strong>원</p>
