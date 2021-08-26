@@ -24,13 +24,13 @@
     <title>Document</title>
 </head>
 <body>
-    <div class=" container">
+    <div class="container">
         <h1>게시글 등록</h1>
-        <form name="f" action="#" method="post">
+        <form name="f" action="/jsp_leopard/write.board?user_id=${login.uId }" method="post">
         <table class="board_write">
             <tr>
                 <th class="title">이름</th>
-                <td class="table_text"><input type="text" class="inputtext" size="15"></td>
+                <td class="table_text"><input type="text" name = "name" value = "${login.uName }" readonly="readonly" class="inputtext" size="15"></td>
             </tr>
             <tr>
                 <th class="title">제목</th>
@@ -42,7 +42,7 @@
             </tr>
             <tr class="writer_botton">
                 <td colspan="2">
-                <input type="button" value="등록" onclick="formCheck()" class="table_button">
+                <input type="submit" value="등록" onclick="formCheck()" class="table_button">
                 <input type="reset" value="취소" class="table_button">
                 <input type="button" value="글목록" class="table_button" onclick="location.href='./board_list.jsp'"></td>
             </tr>
